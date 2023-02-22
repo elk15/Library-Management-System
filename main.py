@@ -1,6 +1,6 @@
 #Class that keeps track of each member and the books they have borrowed
 class Member:
-    #Create unique id for each member
+    #Creates unique id for each member
     class_id = 0
     def __init__(self, name, address, phone, email, age, occupation):
         self.name = name
@@ -30,6 +30,33 @@ class Member:
             return 1
         else:
             return 0
+
+class Book:
+    #Creates unique id for each book
+    class_id = 0
+    def __init__(self, title, genre, author, isbn, amount):
+        self.title = title
+        self.genre = genre
+        self.author = author
+        self.isbn = isbn
+        self.amount = amount
+        self.id = Book.class_id
+        Book.class_id += 1
+    
+    def borrow_book(self):
+        if self.amount > 0:
+            self.amount -= 1
+            return 1
+        return 0
+    
+    def return_book(self):
+        self.amount += 1
+        return 1
+
+class Library:
+    def __init__(self):
+        self.members = []
+        self.books = []
 
 
     
