@@ -58,5 +58,8 @@ class Library:
         self.members = []
         self.books = []
 
+    def sort_by_genre(self, genre):
+        return [book for book in self.books if book.genre == genre]
+
 
     
