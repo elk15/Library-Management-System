@@ -1,3 +1,5 @@
+import json
+
 # Class that keeps track of each member and the books they have borrowed
 class Member:
     def __init__(self, name, address, phone, email, age, occupation, id):
@@ -57,12 +59,11 @@ class Library:
 
     # Imports books from text file and adds them to the list(self.books)
     def import_books(self):
-        with open('books.txt') as new_file:
-            for line in new_file:
-                line = line.replace('\n', '')
-                parts = line.split(';')
-                new_book = Book(parts[0], parts[1], parts[2], parts[3], int(parts[4]), parts[5])
-                self.books.append(new_book)
+        with open('book_data.json') as my_file:
+            data = json.load(my_file)
+        for book in data:
+            new_book = Book(book['Title'], book['Genre'], book['Author'], book['ISBN'], int(book['Amount']), book['ID'])
+            self.books.append(new_book)
 
     def calculate_book_id(self):
         last_book_id = self.books[-1].id
@@ -75,8 +76,21 @@ class Library:
         if isbn not in [book.isbn for book in self.books]:
             id = self.calculate_book_id()
             new_book = Book(title, genre, author, isbn, amount, id)
-            with open("books.txt", "a") as my_file:
-                my_file.write(f'{new_book.title};{new_book.genre};{new_book.author};{new_book.isbn};{new_book.amount};{new_book.id}\n')
+            
+            listObj = []
+            with open('book_data.json') as my_file:
+                listObj = json.load(my_file)
+            listObj.append({
+                "Title" : f"{new_book.title}",
+                "Genre" : f"{new_book.genre}",
+                "Author" : f"{new_book.author}",
+                "ISBN" : f"{new_book.isbn}",
+                "Amount" : f"{new_book.amount}",
+                "ID" : f"{new_book.id}"
+            })
+            with open('book_data.json', 'w') as json_file:
+                json.dump(listObj, json_file, indent=4, separators=(',', ': '))
+
             self.books.append(new_book)
         else:
             print('This book already exists in the database.')

@@ -1,4 +1,0 @@
-The Hobbit;Fantasy;J.R.R. Tolkien;978-0547928227;10;B0
-Pride and Prejustice;Romance;Jane Austen;978-0141439518;7;B1
-To Kill A Mockingbird;Historical;Harper Lee;978-0434020485;12;B2
-C Programming Language;Educational;Brian W. Kernighan & Dennis M. Ritchie;978-0131103627;5;B3

@@ -1,0 +1,26 @@
+[
+    {
+        "Title": "The Hobbit",
+        "Genre": "Fantasy",
+        "Author": "J.R.R. Tolkien",
+        "ISBN": "978-0547928227",
+        "Amount": "10",
+        "ID": "B0"
+    },
+    {
+        "Title": "Pride and Prejustice",
+        "Genre": "Romance",
+        "Author": "Jane Austen",
+        "ISBN": "978-0141439518",
+        "Amount": "7",
+        "ID": "B1"
+    },
+    {
+        "Title": "The Color of Magic",
+        "Genre": "Fantasy",
+        "Author": "Terry Pratchett",
+        "ISBN": "978-0062225672",
+        "Amount": "10",
+        "ID": "B2"
+    }
+]
