@@ -31,14 +31,21 @@ class Member:
             return 0
 
 class Book:
-    def __init__(self, title, genre, author, isbn, amount, id):
+    def __init__(self, title, author, pages, cover, published_date, description, isbn, amount, id):
         self.title = title
-        self.genre = genre
+        self.genres = []
         self.author = author
+        self.pages = pages
+        self.cover = cover
+        self.published_date = published_date
+        self.description = description
         self.isbn = isbn
         self.amount = amount
         self.id = id
     
+    def add_new_genre(self, genre):
+        self.genres.append(genre)
+
     def borrow_book(self):
         if self.amount > 0:
             self.amount -= 1
@@ -50,7 +57,7 @@ class Book:
         return 1
     
     def __str__(self):
-        return f'{self.title} by {self.author}, {self.genre}, isbn: {self.isbn}, amount in inventory: {self.amount}, id: {self.id}'
+        return f'{self.title} by {self.author} publication date: {self.published_date}, pages: {self.pages},\n{self.genres}, description: {self.description} isbn: {self.isbn}, amount in inventory: {self.amount}, id: {self.id}'
 
 class Library:
     def __init__(self):
@@ -62,51 +69,77 @@ class Library:
         with open('book_data.json') as my_file:
             data = json.load(my_file)
         for book in data:
-            new_book = Book(book['Title'], book['Genre'], book['Author'], book['ISBN'], int(book['Amount']), book['ID'])
+            new_book = Book(book['Title'], book['Author'], book['Pages'], book['Cover'], book['PublishedDate'], book['Description'], book['ISBN'], int(book['Amount']), book['ID'])
+            for genre in book['Genres'].split(","):
+                new_book.add_new_genre(genre)
             self.books.append(new_book)
+    
+
+    def find_book_with_isbn(self, isbn):
+        return [book for book in self.books if book.isbn == isbn][0]
 
     def calculate_book_id(self):
-        last_book_id = self.books[-1].id
+        if not self.books:
+            last_book_id = 'B0'
+        else:
+            last_book_id = self.books[-1].id
         next_id = 'B' + str(int(last_book_id[1:]) + 1)
         return next_id
 
     # this function adds a new book if it doesn't already exist in the database
     # we use isbn-13
-    def add_new_book(self, title, genre, author, isbn, amount):
+    # accepts a list of genres 
+    def add_new_book(self, title, genres, author, pages, cover, published_date, description, isbn, amount):
+        listObj = []
+        with open('book_data.json') as my_file:
+            listObj = json.load(my_file)
+
         if isbn not in [book.isbn for book in self.books]:
             id = self.calculate_book_id()
-            new_book = Book(title, genre, author, isbn, amount, id)
+            new_book = Book(title, author, pages, cover, published_date, description, isbn, amount, id)
+            for genre in genres:
+                new_book.add_new_genre(genre)
             
-            listObj = []
-            with open('book_data.json') as my_file:
-                listObj = json.load(my_file)
+            string_genres = ",".join(new_book.genres)
+
             listObj.append({
                 "Title" : f"{new_book.title}",
-                "Genre" : f"{new_book.genre}",
+                "Genres" : f"{string_genres}",
                 "Author" : f"{new_book.author}",
+                "Pages" : f"{new_book.pages}",
+                "Cover" : f"{new_book.cover}",
+                "PublishedDate" : f"{new_book.published_date}",
+                "Description" : f"{new_book.description}",
                 "ISBN" : f"{new_book.isbn}",
                 "Amount" : f"{new_book.amount}",
                 "ID" : f"{new_book.id}"
             })
-            with open('book_data.json', 'w') as json_file:
-                json.dump(listObj, json_file, indent=4, separators=(',', ': '))
-
+            
             self.books.append(new_book)
         else:
+            for genre in genres:
+                if genre not in [book.genres for book in self.books if book.isbn == isbn][0]:
+                    self.find_book_with_isbn(isbn).add_new_genre(genre)
+                    for book in listObj:
+                        if book["ISBN"] == isbn:
+                            parts = book["Genres"].split(",")
+                            parts.append(genre)
+                            book["Genres"] = ",".join(parts)
             print('This book already exists in the database.')
 
+        with open('book_data.json', 'w') as json_file:
+                json.dump(listObj, json_file, indent=4, separators=(',', ': '))
+
     def sort_by_genre(self, genre):
-        return [book for book in self.books if book.genre == genre]
+        return [book for book in self.books if genre in book.genres]
 
     def main(self):
         self.import_books()
-        for book in self.books:
-            print(book)
-        for book in self.sort_by_genre('Romance'):
-            print(book)
+
 
 my_library = Library()
 my_library.main()
+
 
 
     
