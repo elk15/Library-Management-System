@@ -28,26 +28,26 @@ class Member:
     def borrow_book(self, book):
         """
         Adds a new book to the list of borrowed books
-        returns 0 if the book already exists in the list
-        returns 1 if it was added succesfully
+        returns False if the book already exists in the list
+        returns True if it was added succesfully
         """
         if book not in self.borrowed_books:
             self.borrowed_books.append(book)
-            return 1
+            return True
         else:
-            return 0
+            return False
     
     def return_book(self, book):
         """
         Removes a book from the list of borrowed books
-        returns 0 if the book doesn't exist in the list
-        returns 1 if it was removed succesfully
+        returns False if the book doesn't exist in the list
+        returns True if it was removed succesfully
         """
         if book in self.borrowed_books:
             self.borrowed_books.remove(book)
-            return 1
+            return True
         else:
-            return 0
+            return False
 
 class Book:
     """A book that is part of the library"""
@@ -84,16 +84,15 @@ class Book:
 
     def borrow_book(self):
         """ Reduces the amount of copies when a book is borrowed 
-            if there are zero copies it returns 0"""
+            if there are zero copies it returns False"""
         if self.amount > 0:
             self.amount -= 1
-            return 1
-        return 0
+            return True
+        return False
     
     def return_book(self):
         """ When a book is returned it increases the amount of available copies"""
         self.amount += 1
-        return 1
     
     def increase_copies(self, amount):
         """ Increases the amount of copies"""
