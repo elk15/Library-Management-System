@@ -21,12 +21,9 @@ def fetch_books(genre):
 
                 # insert random amount of books
                 amount = random.randint(5, 50)
-
-                genres = []
-                genres.append(genre)
                     
                 try:
-                    new_library.add_new_book(item['volumeInfo']['title'], genres, ','.join(item['volumeInfo']['authors']), item['volumeInfo']['pageCount'], item['volumeInfo']['imageLinks']['thumbnail'], item['volumeInfo']['publishedDate'], item['volumeInfo']['description'], isbn, amount)
+                    new_library.add_new_book(item['volumeInfo']['title'], genre, ','.join(item['volumeInfo']['authors']), item['volumeInfo']['pageCount'], item['volumeInfo']['imageLinks']['thumbnail'], item['volumeInfo']['publishedDate'], item['volumeInfo']['description'], isbn, amount)
                 except KeyError as e:
                     book_name = item['volumeInfo']['title']
                     print(f'Key {e} not found for book: {book_name}')
