@@ -1,6 +1,6 @@
 from book import Book
-import json
 import sqlite3
+import uuid
 
 class Member:
     """A library member"""
@@ -63,17 +63,22 @@ class Library:
         """
         self.library_con = sqlite3.connect("library.db")
         self.library_cur = self.library_con.cursor()
+        self.existing_book_ids = set(self.library_cur.execute(f"SELECT bookid FROM books"))
     
 
     def check_if_book_exists(self, isbn):
         """Checks if a book already exists in the database using its isbn"""
-        res = cur.execute(f"SELECT title FROM books WHERE isbn = '{isbn}'")
+        res = self.library_cur.execute(f"SELECT title FROM books WHERE isbn = '{isbn}'")
         if res.fetchone() is None:
             return False
         return True
 
     def calculate_book_id(self):
-        pass
+        """Calculates a unique book id using uuid module"""
+        bookid = "B" + str(uuid.uuid4())
+        while bookid in self.existing_book_ids:
+            bookid = "B" + str(uuid.uuid4())
+        return bookid
 
     def add_new_book(self, title, genres, author, pages, cover, published_date, description, isbn, amount):
         pass
@@ -88,7 +93,8 @@ class Library:
 
 if __name__ == "__main__":
     my_library = Library()
-
+    print(my_library.check_if_book_exists("dj48jf899"))
+    print(my_library.calculate_book_id())
 
 
     
