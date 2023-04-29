@@ -63,12 +63,12 @@ class Library:
         """
         self.library_con = sqlite3.connect("library.db")
         self.library_cur = self.library_con.cursor()
-        self.existing_book_ids = set(self.library_cur.execute(f"SELECT bookid FROM books"))
+        self.existing_book_ids = set(self.library_cur.execute("SELECT bookid FROM books"))
     
 
     def check_if_book_exists(self, isbn):
         """Checks if a book already exists in the database using its isbn"""
-        res = self.library_cur.execute(f"SELECT title FROM books WHERE isbn = '{isbn}'")
+        res = self.library_cur.execute("SELECT title FROM books WHERE isbn = ?", (isbn,))
         if res.fetchone() is None:
             return False
         return True
@@ -80,8 +80,23 @@ class Library:
             bookid = "B" + str(uuid.uuid4())
         return bookid
 
-    def add_new_book(self, title, genres, author, pages, cover, published_date, description, isbn, amount):
-        pass
+    def add_new_book(self, title, genre, author, pages, cover, published_date, description, isbn, amount):
+        """Adds a new book to the sqlite database 
+        if the book already exists it only increases the amount"""
+        if not self.check_if_book_exists(isbn):
+            self.library_cur.execute("""
+            INSERT INTO books VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                (self.calculate_book_id(), title, genre, author, pages, cover, published_date, description, isbn, amount))
+            self.library_con.commit()
+        else:
+            self.library_cur.execute("""
+            UPDATE books
+            SET amount = amount + ?
+            WHERE isbn = ?""", (amount, isbn))
+            self.library_con.commit()
+
+
 
 
     def sort_by_genre(self, genre):
@@ -93,8 +108,5 @@ class Library:
 
 if __name__ == "__main__":
     my_library = Library()
-    print(my_library.check_if_book_exists("dj48jf899"))
-    print(my_library.calculate_book_id())
-
 
     
