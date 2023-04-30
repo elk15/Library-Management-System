@@ -1,4 +1,3 @@
-from book import Book
 import sqlite3
 import re
 import uuid
@@ -88,10 +87,10 @@ class Library:
             return
 
     def sort_by_genre(self, genre):
-        """Returns iterable with tuples
+        """Returns a list with books belonging in a specific category
         @author elina styliani papadimitriou
         """
-        return self.library_cur.execute("SELECT * FROM books WHERE genre = ?", (genre,))
+        return [book for book in self.library_cur.execute("SELECT * FROM books WHERE genre = ?", (genre,)).fetchall()]
 
     def main(self):
        pass
@@ -99,6 +98,7 @@ class Library:
 
 if __name__ == "__main__":
     my_library = Library()
+    print(my_library.sort_by_genre('Fantasy'))
 
 
     
