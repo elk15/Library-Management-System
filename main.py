@@ -13,7 +13,7 @@ class Library:
         """
         self.library_con = sqlite3.connect("library.db")
         self.library_cur = self.library_con.cursor()
-        self.existing_book_ids = set(self.library_cur.execute("SELECT bookid FROM books"))
+        self.existing_book_ids = [id[0] for id in self.library_cur.execute("SELECT bookid FROM books").fetchall()]
     
 
     def check_if_book_exists(self, isbn):
@@ -59,14 +59,19 @@ if __name__ == "__main__":
 
     # check_if_book_exists tests
     # expects True
-    print(my_library.check_if_book_exists('9781442457027'))
-    print(my_library.check_if_book_exists(9781442457027))
+    # print(my_library.check_if_book_exists('9781442457027'))
+    # print(my_library.check_if_book_exists(9781442457027))
     # expects False
-    print(my_library.check_if_book_exists(9781))
-    print(my_library.check_if_book_exists(False))
-    print(my_library.check_if_book_exists(' '))
-    print(my_library.check_if_book_exists('1081442457027'))
-    print(my_library.check_if_book_exists('108144245702754'))
+    # print(my_library.check_if_book_exists(9781))
+    # print(my_library.check_if_book_exists(False))
+    # print(my_library.check_if_book_exists(' '))
+    # print(my_library.check_if_book_exists('1081442457027'))
+    # print(my_library.check_if_book_exists('108144245702754'))
+
+    # calculate_book_id tests 
+    # print(my_library.existing_book_ids)
+    # print(my_library.calculate_book_id())
+
 
     
 
