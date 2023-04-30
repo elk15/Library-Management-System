@@ -1,6 +1,9 @@
 from book import Book
 import sqlite3
+import re
 import uuid
+
+
 
 class Library:
     """The Library system"""
@@ -15,16 +18,46 @@ class Library:
         self.library_cur = self.library_con.cursor()
         self.existing_book_ids = [id[0] for id in self.library_cur.execute("SELECT bookid FROM books").fetchall()]
     
+    def validate_book_input(self, title, genre, author, pages, cover, published_date, description, isbn, amount):
+        """Checks if the input entered by the user when
+        adding a new book is correct using regular expressions
+        @author elina styliani papadimitriou
+        """
+
+        if len(str(title)) < 2 or len(str(genre)) < 2 or len(str(author)) < 2 or len(str(description)) < 2:
+            print("Input must be at least 2 characters")
+            return False
+        try:
+            if int(pages) <= 0 or int(amount) <= 0 or isinstance(pages, float) or isinstance(amount, float):
+                print("Pages and amount must be a positive integer")
+                return False
+        except ValueError:
+            print("Pages and amount must be a positive integer")
+            return False
+        if not re.fullmatch('^(?:[0-9]{4})(?:-(?:0[1-9]|1[0-2]))?(?:-(?:0[1-9]|1[0-9]|2[0-9]|3[0-1]))?$', str(published_date)):
+            print("Published date must be in this format YYYY-MM-DD month and day are optional")
+            return False
+        if not re.fullmatch('^\S+\.\S+$', str(cover)):
+            print("Cover must be a link")
+            return False
+        if not re.fullmatch('^[0-9]{13}$', str(isbn)):
+            print("ISBN-13 must have a length of 13 integers")
+            return False
+        return True
 
     def check_if_book_exists(self, isbn):
-        """Checks if a book already exists in the database using its isbn"""
-        res = self.library_cur.execute("SELECT title FROM books WHERE isbn = ?", (str(isbn),))
+        """Checks if a book already exists in the database using its isbn
+        @author elina styliani papadimitriou
+        """
+        res = self.library_cur.execute("SELECT title FROM books WHERE isbn = ?", (isbn,))
         if res.fetchone() is None:
             return False
         return True
 
     def calculate_book_id(self):
-        """Calculates a unique book id using uuid module"""
+        """Calculates a unique book id using uuid module
+        @author elina styliani papadimitriou
+        """
         bookid = "B" + str(uuid.uuid4())
         while bookid in self.existing_book_ids:
             bookid = "B" + str(uuid.uuid4())
@@ -32,22 +65,32 @@ class Library:
 
     def add_new_book(self, title, genre, author, pages, cover, published_date, description, isbn, amount):
         """Adds a new book to the sqlite database 
-        if the book already exists it only increases the amount"""
-        if not self.check_if_book_exists(isbn):
-            self.library_cur.execute("""
-            INSERT INTO books VALUES
-                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                (self.calculate_book_id(), title, genre, author, pages, cover, published_date, description, isbn, amount))
-            self.library_con.commit()
+        if the book already exists it only increases the amount
+        @author elina styliani papadimitriou
+        """
+        if self.validate_book_input(title, genre, author, pages, cover, published_date, description, isbn, amount):
+            if not self.check_if_book_exists(isbn):
+                self.library_cur.execute("""
+                INSERT INTO books VALUES
+                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    (self.calculate_book_id(), title, genre, author, pages, cover, published_date, description, isbn, amount))
+                self.library_con.commit()
+                print(f"{title} succesfully added")
+            else:
+                self.library_cur.execute("""
+                UPDATE books
+                SET amount = amount + ?
+                WHERE isbn = ?""", (amount, isbn))
+                self.library_con.commit()
+                print(f"{title} already exists in the database. Amount increased by {amount}")
         else:
-            self.library_cur.execute("""
-            UPDATE books
-            SET amount = amount + ?
-            WHERE isbn = ?""", (amount, isbn))
-            self.library_con.commit()
+            print("Failed to add new book")
+            return
 
     def sort_by_genre(self, genre):
-        """Returns iterable with tuples"""
+        """Returns iterable with tuples
+        @author elina styliani papadimitriou
+        """
         return self.library_cur.execute("SELECT * FROM books WHERE genre = ?", (genre,))
 
     def main(self):
@@ -56,21 +99,6 @@ class Library:
 
 if __name__ == "__main__":
     my_library = Library()
-
-    # check_if_book_exists tests
-    # expects True
-    # print(my_library.check_if_book_exists('9781442457027'))
-    # print(my_library.check_if_book_exists(9781442457027))
-    # expects False
-    # print(my_library.check_if_book_exists(9781))
-    # print(my_library.check_if_book_exists(False))
-    # print(my_library.check_if_book_exists(' '))
-    # print(my_library.check_if_book_exists('1081442457027'))
-    # print(my_library.check_if_book_exists('108144245702754'))
-
-    # calculate_book_id tests 
-    # print(my_library.existing_book_ids)
-    # print(my_library.calculate_book_id())
 
 
     
