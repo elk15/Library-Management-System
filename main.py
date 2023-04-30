@@ -18,7 +18,7 @@ class Library:
 
     def check_if_book_exists(self, isbn):
         """Checks if a book already exists in the database using its isbn"""
-        res = self.library_cur.execute("SELECT title FROM books WHERE isbn = ?", (isbn,))
+        res = self.library_cur.execute("SELECT title FROM books WHERE isbn = ?", (str(isbn),))
         if res.fetchone() is None:
             return False
         return True
@@ -56,6 +56,18 @@ class Library:
 
 if __name__ == "__main__":
     my_library = Library()
-    for book in my_library.sort_by_genre("Fantasy"):
-        print(book)
+
+    # check_if_book_exists tests
+    # expects True
+    print(my_library.check_if_book_exists('9781442457027'))
+    print(my_library.check_if_book_exists(9781442457027))
+    # expects False
+    print(my_library.check_if_book_exists(9781))
+    print(my_library.check_if_book_exists(False))
+    print(my_library.check_if_book_exists(' '))
+    print(my_library.check_if_book_exists('1081442457027'))
+    print(my_library.check_if_book_exists('108144245702754'))
+
+    
+
     
