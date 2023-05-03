@@ -14,26 +14,16 @@ class LibraryMember:
                  occupation: str,
                  status: str):
 
-        # check member id
         self._member_id = member_id
-        # check name
         self._name = name
-
-        # check address
         self._address = address
-
-        # check phone number
         self._phone_number = phone_number
-
-        # check email
         self._email = email
-
-        # check age
         self._age = age
-
         self._occupation = occupation
 
-        # check if status is active or inactive
+        if status.lower() not in ['ενεργή', 'ανενεργή']:
+            raise Exception(f"Μη έγκυρη τιμή status: {status}. Παρακαλώ επιλέξτε ενεργή ή ανενεργή")
         self._status = status
 
     def __repr__(self):
@@ -48,3 +38,4 @@ class LibraryMember:
 
     def get_member_status(self):
         return self._status
+

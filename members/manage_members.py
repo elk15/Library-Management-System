@@ -9,7 +9,7 @@ from member import LibraryMember
 logger = logging.getLogger()
 
 
-class LibraryMemberStorage:
+class MemberStorage:
 
     def __init__(self, filename):
         self.filename = filename
@@ -34,10 +34,10 @@ class LibraryMemberStorage:
             return list()
 
 
-class MemberProfileManager:
+class MemberManager:
 
     def __init__(self, database_path: str):
-        self._storage = LibraryMemberStorage(database_path)
+        self._storage = MemberStorage(database_path)
         self._members = self._storage.load_members()
         self._existing_member_ids = set(member.get_member_id() for member in self._members)
 
@@ -70,12 +70,12 @@ class MemberProfileManager:
     def renew_membership(self, member_id: LibraryMember):
         """Ανανέωση εγγραφής μέλους"""
         # renew the members subsription
-        status = MemberProfileManager.set_member_status(active=True)
+        status = MemberManager.set_member_status(active=True)
         pass
 
     def pause_membership(self, member: LibraryMember):
         """Διακοπή εγγραφής μέλους"""
-        status = MemberProfileManager.set_member_status(active=False)
+        status = MemberManager.set_member_status(active=False)
         pass
 
     def get_member_profile_by_id(self, member_id: str):
@@ -102,12 +102,54 @@ class MemberProfileManager:
         return member_id in self._existing_member_ids
 
 
+class MemberManagerUI():
+    """ προσομοιάζει τις λειτουργίες του UI"""
+    def __init__(self):
+        pass
+
+    def add_new_member(self):
+        required_fields = ["όνομα", "διεύθυνση", "τηλέφωνο", "e-mail", "ηλικία", "επάγγελμα"]
+        print("Παρακαλώ εισάγετε τα παρακάτω στοιχεία του μέλους ή πατήστε ΕΝΤΕR για επιστροφή στο αρχικό μενού")
+        for field in required_fields:
+            while True:
+                check_passed = None
+                if check_passed:
+                    pass
+
+
+
+
+class MemberDetailsChecker:
+
+    def __init__(self):
+        pass
+
+    def check_member_name(self):
+        pass
+
+    def check_member_address(self):
+        pass
+
+    def check_member_email(self):
+        pass
+
+    def check_member_age(self, age: Union[int, float]):
+        lower_age_limit = 3
+        upper_age_limit = 100
+        if lower_age_limit <= age <= upper_age_limit:
+            return age
+        else:
+            print(f"Μη έγκυρη τιμή ηλικίας μέλους: {age}. "
+                  f"Η ηλικία πρέπει να είναι μεταξύ {lower_age_limit}-{upper_age_limit} ετών")
+            return None
+
+
 
 
 if __name__ == "__main__":
     #### Εισαγωγή δεδομένων στις αρχικές δομές
-    filename = "members.txt"
-    member_profile_manager = MemberProfileManager(filename)
+    filename = "../database/members.txt"
+    member_profile_manager = MemberManager(filename)
 
     while True:
 
@@ -119,6 +161,7 @@ if __name__ == "__main__":
         print("4. Διακοπή εγγραφής μέλους", end="")
         choice = input("Εισάγετε την επιλογή σας:")
         if choice == "1":
+
             member_profile_manager.add_new_member()
         elif choice == "2":
             member_profile_manager.update_member_profile()
