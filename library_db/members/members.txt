@@ -1,0 +1,11 @@
+ID	Name    Surname Address	Phone Number	Email	Age	Occupation	Status
+0	John    Smith	123 Main St, Anytown, USA	(555) 555-1234	john.smith@email.com	32	Accountant	Active
+1	Jane    Doe	456 Elm St, Anytown, USA	(555) 555-5678	jane.doe@email.com	45	Teacher	Active
+2	David   Johnson	789 Oak St, Anytown, USA	(555) 555-9012	david.johnson@email.com	26	Software Engineer	Inactive
+3	Maria   Garcia	101 Maple St, Anytown, USA	(555) 555-3456	maria.garcia@email.com	37	Doctor	Active
+4	Michael Brown	555 Pine St, Anytown, USA	(555) 555-6789	michael.brown@email.com	52	Lawyer	Inactive
+5	Sarah   Lee	222 Cedar Ave, Anytown, USA	(555) 555-1111	sarah.lee@email.com	28	Marketing Manager	Active
+6	William Chen	333 Oakwood Dr, Anytown, USA	(555) 555-2222	william.chen@email.com	43	Account Executive	Inactive
+7	Emily   Davis	444 Elmwood Rd, Anytown, USA	(555) 555-3333	emily.davis@email.com	30	Graphic Designer	Active
+8	James   Wilson	555 Maplewood Ave, Anytown, USA	(555) 555-4444	james.wilson@email.com	50	CEO	Inactive
+9	Elizabeth   Kim	666 Birch St, Anytown, USA	(555) 555-5555	elizabeth.kim@email.com	29	Data Scientist	Active
