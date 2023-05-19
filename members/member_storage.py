@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from member import LibraryMember
+from members.member import LibraryMember
 
 import sqlite3
 from sqlite3 import Cursor
@@ -53,18 +53,25 @@ class MemberStorage:
             print(f'Failed to update database entry: {e}')
 
     def load_member_by_id(self, member_id: str) -> Optional[LibraryMember]:
-        sql_query = f"SELECT * FROM members WHERE member_id={member_id}"
+
         try:
             with sqlite3.connect(self.filename) as conn:
                 cursor = conn.cursor()
-                cursor.execute(sql_query)
+                cursor.execute(f"SELECT * FROM members WHERE member_id={member_id}")
                 results = cursor.fetchall()
         except sqlite3.Error as e:
             print(f'Failed to retrieve member with member id: {member_id} from the database: {e}')
             return None
 
-        assert len(results) == 1, f"{len(results)} entries with the same id were found in the database"
-        member_profile = LibraryMember(*results[0])
+        num_found_members = len(results)
+        if num_found_members < 1:
+            print(f"Member with ID {member_id} was not found in the database.")
+            member_profile = None
+        elif num_found_members > 1:
+            raise Exception(f"{num_found_members} entries with the same id were found in the database.")
+        else:
+            member_profile = LibraryMember(*results[0])
+
         return member_profile
 
     def load_members(self) -> List[LibraryMember]:
