@@ -3,7 +3,7 @@ from typing import Optional
 
 
 class LibraryMember:
-    """ Προφίλ μέλους δανειστικής βιβλιοθήκης"""
+    """ Library member profile"""
     LOWER_AGE_LIMIT = 3
     UPPER_AGE_LIMIT = 105
 
@@ -26,65 +26,58 @@ class LibraryMember:
         self._occupation = occupation
         self._status = status
 
-    def __repr__(self):
-        """Prints class attributes"""
-        attributes = ""
-        for attribute_name, attribute_val in self.__dict__.items():
-            attributes += f"{attribute_val}\t"
-        return attributes
-
-    def set_member_id(self, member_id: int):
+    def set_member_id(self, member_id: int) -> None:
         self._member_id = member_id
 
-    def set_name(self, name: str):
+    def set_name(self, name: str) -> None:
         if self.validate_name(name):
             self._name = name
 
-    def set_address(self, address: str):
+    def set_address(self, address: str) -> None:
         # TODO: Add address validation
         self._address = address
 
-    def set_phone_number(self, phone_number: str):
+    def set_phone_number(self, phone_number: str) -> None:
         if self.validate_phone_number(phone_number):
             self._phone_number = phone_number
 
-    def set_email(self, email: str):
+    def set_email(self, email: str) -> None:
         if self.validate_email(email):
             self._email = email
 
-    def set_age(self, age: str):
+    def set_age(self, age: str) -> None:
         if self.validate_age(age):
             self._age = age
 
-    def set_occupation(self, occupation: str):
+    def set_occupation(self, occupation: str) -> None:
         self._occupation = occupation
 
-    def set_status(self, status: str):
+    def set_status(self, status: str) -> None:
         if self.validate_status(status):
             self._status = status
 
-    def get_member_id(self):
+    def get_member_id(self) -> int:
         return self._member_id
 
-    def get_name(self):
+    def get_name(self) -> str:
         return self._name
 
-    def get_address(self):
+    def get_address(self) -> str:
         return self._address
 
-    def get_phone_number(self):
+    def get_phone_number(self) -> str:
         return self._phone_number
 
-    def get_email(self):
+    def get_email(self) -> str:
         return self._email
 
-    def get_age(self):
+    def get_age(self) -> str:
         return self._age
 
-    def get_occupation(self):
+    def get_occupation(self) -> str:
         return self._occupation
 
-    def get_status(self):
+    def get_status(self) -> str:
         return self._status
 
     @staticmethod
@@ -110,8 +103,8 @@ class LibraryMember:
             print(f"Phone number is empty")
             return None
 
-        pattern = r'^\+?[0-9 \-]+$'
-        if not re.match(pattern, phone_number):
+        # Ensure that the phone number consists of digits, spaces, hyphens and optionally a country code (such as +30)
+        if not re.match(r'^\+?[0-9 \-]+$', phone_number):
             print(f"Invalid phone number: {phone_number}")
             return None
 
@@ -154,19 +147,19 @@ class LibraryMember:
         return email
 
     @staticmethod
-    def validate_occupation(occupation: str):
+    def validate_occupation(occupation: str) -> Optional[str]:
+        # checks that the occupation is not empty
         if not occupation.strip():
             return None
 
         return occupation
 
     @staticmethod
-    def validate_status(status: str):
+    def validate_status(status: str) -> Optional[str]:
         if status is None:
             return None
 
-        valid_status_vals = ['active', 'inactive']
-        if status.lower() not in valid_status_vals:
-            raise Exception(f"Μη έγκυρη τιμή status: {status} με επιτρεπτές τιμές: {valid_status_vals}")
+        if status.lower() not in ['active', 'inactive']:
+            raise Exception(f"Invalid status: {status}. Status can be either Active or Inactive")
 
         return status

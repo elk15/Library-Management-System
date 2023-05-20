@@ -5,13 +5,19 @@ from members.member import LibraryMember
 import sqlite3
 from sqlite3 import Cursor
 
+PATH_TO_LIBRARY_DB = './library.db'
+
 
 class MemberStorage:
 
-    def __init__(self, filename):
-        self.filename = filename
+    def __init__(self, path_to_db: Optional[str] = None):
+        path_to_db = path_to_db if path_to_db is not None else PATH_TO_LIBRARY_DB
+        self.path_to_db = path_to_db
 
     def save_member(self, member: LibraryMember) -> None:
+        """
+        Save member profile in the library db
+        """
 
         member_name = member.get_name()
         member_email = member.get_email()
@@ -21,7 +27,7 @@ class MemberStorage:
                          "(member_id, name, address, phone_number, email, age, occupation, status)" \
                          "VALUES"
         try:
-            with sqlite3.connect(self.filename) as conn:
+            with sqlite3.connect(self.path_to_db) as conn:
                 cursor = conn.cursor()
 
                 if self.member_already_exists(cursor, member_name, member_email):
@@ -37,13 +43,17 @@ class MemberStorage:
             return None
 
     def update_member_entry(self, member: LibraryMember) -> None:
+        """
+        Update the entry of a member in the library database
+        """
         member_attributes_copy = vars(member).copy()
         member_id = member_attributes_copy.pop('_member_id')
+
         columns = ", ".join([f'{key.strip("_")} = ?'for key in member_attributes_copy.keys()])
         values = tuple(member_attributes_copy.values())
 
         try:
-            with sqlite3.connect(self.filename) as conn:
+            with sqlite3.connect(self.path_to_db) as conn:
                 cursor = conn.cursor()
 
                 cursor.execute(f"UPDATE members SET {columns} WHERE member_id = {member_id}", values)
@@ -55,7 +65,7 @@ class MemberStorage:
     def load_member_by_id(self, member_id: str) -> Optional[LibraryMember]:
 
         try:
-            with sqlite3.connect(self.filename) as conn:
+            with sqlite3.connect(self.path_to_db) as conn:
                 cursor = conn.cursor()
                 cursor.execute(f"SELECT * FROM members WHERE member_id={member_id}")
                 results = cursor.fetchall()
@@ -75,11 +85,13 @@ class MemberStorage:
         return member_profile
 
     def load_members(self) -> List[LibraryMember]:
-        sql = "SELECT * FROM MEMBERS"
+        """
+        Loads all the entries from the members table
+        """
         try:
-            with sqlite3.connect(self.filename) as conn:
+            with sqlite3.connect(self.path_to_db) as conn:
                 cursor = conn.cursor()
-                cursor.execute(sql)
+                cursor.execute("SELECT * FROM MEMBERS")
                 rows = cursor.fetchall()
                 member_profiles = [LibraryMember(*row) for row in rows]
                 return member_profiles
@@ -89,6 +101,9 @@ class MemberStorage:
 
     @staticmethod
     def member_already_exists(cursor: Cursor, member_name: str, member_email: str):
+        """
+        Check if a member with the given name and email already exists in the database
+        """
         sql_query = f"SELECT EXISTS(SELECT 1 FROM MEMBERS WHERE name = ? AND email = ?)"
         cursor.execute(sql_query, (member_name, member_email))
         result = cursor.fetchone()[0]
