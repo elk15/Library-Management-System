@@ -1,3 +1,2 @@
-pandas
-sqlite3
-matplotlib
+pandas==2.0.1
+faker==18.7.0
