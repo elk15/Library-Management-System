@@ -4,25 +4,6 @@ from members.member_storage import MemberStorage
 from members.member import LibraryMember
 
 
-def get_member_id(member_id_exists: Callable) -> Optional[int]:
-    """
-    Prompt the user to enter a member ID and validate it.
-
-    This function prompts the user to provide a member ID and performs validation to ensure its correctness.
-    The entered member ID is used to identify a specific member in the system.
-    """
-
-    while True:
-        member_id = input("Enter Member id (contains only digits) or press ENTER to exit: ")
-
-        if not member_id:
-            return None
-        elif not member_id.isdigit():
-            print("Invalid member id. Member ids are non negative integers")
-        elif member_id_exists(int(member_id)):
-            return int(member_id)
-
-
 class MemberManager:
     """
     Class for managing members in the library.
