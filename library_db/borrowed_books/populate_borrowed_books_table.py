@@ -1,5 +1,5 @@
 import datetime
-from typing import List, Tuple
+from typing import List
 from itertools import chain
 import random
 
