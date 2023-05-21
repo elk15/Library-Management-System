@@ -48,7 +48,7 @@ class LibraryStatistics:
         self.borrowed_books = borrowed_books_storage.load_borrowed_books()
         self.borrowed_books['date_borrowed'] = self.borrowed_books['date_borrowed'].apply(convert_str_to_datetime_obj)
 
-    def count_num_books_in_timeframe(self, member_id: str, start_date: datetime, end_date: datetime) -> Optional[int]:
+    def count_num_books_in_timeframe(self, member_id: int, start_date: datetime, end_date: datetime) -> Optional[int]:
         borrowed_books = self.borrowed_books.where(
             (self.borrowed_books['memberid'] == member_id) &
             (self.borrowed_books['date_borrowed'] >= start_date) &
@@ -57,7 +57,7 @@ class LibraryStatistics:
         # number of books borrowed by the member with this id in the specified timeframe
         return borrowed_books['bookid'].count()
 
-    def find_borrowed_books_for_member(self, member_id: str):
+    def find_borrowed_books_for_member(self, member_id: int):
         borrowed_books_ids = self.borrowed_books.loc[self.borrowed_books['memberid'] == member_id, 'bookid']
         borrowed_books_ids = tuple(set(borrowed_books_ids.dropna()))
 
@@ -70,7 +70,8 @@ class LibraryStatistics:
     def find_genre_preferences_in_timeframe(self, start_date: datetime, end_date: datetime) -> Optional[str]:
         borrowed_books_in_timeframe = self.borrowed_books.where(
             (self.borrowed_books['date_borrowed'] >= start_date) &
-            (self.borrowed_books['date_borrowed'] <= end_date))
+            (self.borrowed_books['date_borrowed'] <= end_date)
+        )
         borrowed_books_ids = tuple(borrowed_books_in_timeframe['bookid'].dropna().unique())
 
         if not borrowed_books_ids:
@@ -85,6 +86,7 @@ class LibraryStatistics:
 
 
 class LibraryStatisticsInput:
+
     LibraryStartDate = "04/2022"
 
     def __init__(self, db_filename: Optional[str] = None):
@@ -148,18 +150,6 @@ class LibraryStatisticsInput:
         else:
             print(f"The member with id: {member_id} has not borrowed any books yet")
 
-    def get_member_id(self) -> Optional[str]:
-
-        while True:
-            member_id = input("Enter member id (contains only digits) or press ENTER to exit: ")
-
-            if not member_id:
-                return None
-            elif not member_id.isnumeric():
-                print("Invalid member id. Member ids are non negative integers")
-            elif self.member_id_exists(member_id):
-                return member_id
-
     def get_date(self, message) -> Tuple[str, Optional[datetime.date]]:
 
         while True:
@@ -172,11 +162,29 @@ class LibraryStatisticsInput:
             if date_obj:
                 return date, date_obj
 
+    def get_member_id(self) -> Optional[int]:
+        """
+        Prompt the user to enter a member ID and validate it.
+
+        This function prompts the user to provide a member ID and performs validation to ensure its correctness.
+        The entered member ID is used to identify a specific member in the system.
+        """
+
+        while True:
+            member_id = input("Enter Member id (contains only digits) or press ENTER to exit: ")
+
+            if not member_id:
+                return None
+            elif not member_id.isdigit():
+                print("Invalid member id. Member ids are non negative integers")
+            elif self.member_id_exists(int(member_id)):
+                return int(member_id)
+
     @staticmethod
     def validate_date(date: str) -> Optional[datetime.date]:
         try:
             date_object = datetime.strptime(date, "%m/%Y")
-        except Exception:
+        except ValueError:
             print(f"Invalid date format. Pleas provide a date in the following format: MM/YYYY")
             return None
 
