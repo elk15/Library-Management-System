@@ -1,10 +1,9 @@
 import requests
 import random
-from main import Library
+from book import Book
 
 class GoogleBooksApi:
     def __init__(self):
-        self.new_library = Library()
         self.genres = ['Fantasy', 'Romance', 'Science Fiction', 'Dystopian', 'Education', 'Mystery', 'Spirituality', 'Horror']
     
     def get_response(self, genre, index):
@@ -45,7 +44,7 @@ class GoogleBooksApi:
                     isbn = self.get_isbn13(item)
                     amount = self.get_random_amount()
                     try:
-                        self.new_library.add_new_book(item['volumeInfo']['title'], genre, ','.join(item['volumeInfo']['authors']), item['volumeInfo']['pageCount'], item['volumeInfo']['imageLinks']['thumbnail'], item['volumeInfo']['publishedDate'], item['volumeInfo']['description'], isbn, amount)
+                        Book().add_new_book(item['volumeInfo']['title'], genre, ','.join(item['volumeInfo']['authors']), item['volumeInfo']['pageCount'], item['volumeInfo']['imageLinks']['thumbnail'], item['volumeInfo']['publishedDate'], item['volumeInfo']['description'], isbn, amount)
                     except KeyError as e:
                         book_name = item['volumeInfo']['title']
                         print(f'Key {e} not found for book: {book_name}')
@@ -58,6 +57,6 @@ class GoogleBooksApi:
             self.fetch_books(genre)                
 
 
-
-books_api = GoogleBooksApi()
-books_api.main_loop()
+if __name__ == "__main__":
+    books_api = GoogleBooksApi()
+    books_api.main_loop()
