@@ -31,6 +31,16 @@ class MemberPreferences:
     
     def get_preferences(self):
         return self.preferences
+    
+    def __str__(self):
+        print(f"Preference distribution of member {self.member_id} is:")
+        for month, genres in self.preferences.items():
+            print(month + ":")
+            for genre, amount in genres.items():
+                print(genre + ":" + str(amount))
+            print()
+        return ""
+ 
             
 
 
@@ -38,7 +48,8 @@ class MemberPreferences:
 
 if __name__ == "__main__":
 
-    print(MemberPreferences(10).get_preferences())
+    print(MemberPreferences(11).get_preferences())
+    print(MemberPreferences(11))
     
 
             
