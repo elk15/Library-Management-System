@@ -84,7 +84,7 @@ class Borrow_Books:
         try:
             with sqlite3.connect('library.db') as conn:
                 c = conn.cursor()
-                c.execute("SELECT * FROM members WHERE memberid=?", (search_member,))
+                c.execute("SELECT * FROM members WHERE member_id=?", (search_member,))
                 results = c.fetchall()
                 if len(results) == 0:
                     return 0
