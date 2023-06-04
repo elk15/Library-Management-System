@@ -4,78 +4,57 @@ from tkinter import messagebox
 from borrowed_book import Borrow_Books
 
 
-
 class BorrowBooksGUI:
-    def __init__(self, root):
+    def __init__(self, borrow_books):
 
-        self.root = root
+        self.borrow_books_window = borrow_books
         self.borrow_books = Borrow_Books()
 
-        # Title label
-        # title_label = tk.Label(self.root, text="Library System", font=("Arial", 24))
-        # title_label.pack(pady=20)
+        self.borrow_books_window.title("Library Management System")
+        self.borrow_books_window.geometry("700x500+100+100")
 
-        self.window = tk.Tk()
-        self.window.title("Library Management System")
-
-        self.search_frame = tk.Frame(self.window)
-        self.search_frame.pack(pady=10)
-
-        self.search_label = tk.Label(self.search_frame, text="Search Book:")
+        self.search_frame = tk.Frame(self.borrow_books_window)
+        self.search_frame.pack(pady=10, fill=tk.X)
+        self.search_label = tk.Label(self.search_frame, text="Search Book: \n(by: id/title/isbn/author\n or genre)", font=("Arial", 16, "bold"), anchor="w")
         self.search_label.pack(side=tk.LEFT)
-
         self.search_entry = tk.Entry(self.search_frame, width=30)
         self.search_entry.pack(side=tk.LEFT)
-
-        self.search_button = tk.Button(self.search_frame, text="Search", command=self.search_book)
+        self.search_button = tk.Button(self.search_frame, text="Search", font=("Arial", 16, "bold"), command=self.search_book)
         self.search_button.pack(side=tk.LEFT)
 
-        self.availability_frame = tk.Frame(self.window)
-        self.availability_frame.pack(pady=10)
-
-        self.availability_label = tk.Label(self.availability_frame, text="Check Availability \n(by ID):")
+        self.availability_frame = tk.Frame(self.borrow_books_window)
+        self.availability_frame.pack(pady=10, fill=tk.X)
+        self.availability_label = tk.Label(self.availability_frame, text="Check Availability \n(by ID):", font=("Arial", 16, "bold"), anchor="w")
         self.availability_label.pack(side=tk.LEFT)
-
         self.availability_entry = tk.Entry(self.availability_frame, width=30)
         self.availability_entry.pack(side=tk.LEFT)
-
-        self.availability_button = tk.Button(self.availability_frame, text="Check", command=self.check_availability)
+        self.availability_button = tk.Button(self.availability_frame, text="Check", font=("Arial", 16, "bold"), command=self.check_availability)
         self.availability_button.pack(side=tk.LEFT)
 
-        self.borrow_frame = tk.Frame(self.window)
-        self.borrow_frame.pack(pady=10)
-
-        self.borrow_book_id_label = tk.Label(self.borrow_frame, text="Book ID:")
+        self.borrow_frame = tk.Frame(self.borrow_books_window)
+        self.borrow_frame.pack(pady=10, fill=tk.X)
+        self.borrow_book_id_label = tk.Label(self.borrow_frame, text="Book ID:", font=("Arial", 16, "bold"), anchor="w")
         self.borrow_book_id_label.pack(side=tk.LEFT)
-
-        self.borrow_book_id_entry = tk.Entry(self.borrow_frame, width=10)
+        self.borrow_book_id_entry = tk.Entry(self.borrow_frame, width=30)
         self.borrow_book_id_entry.pack(side=tk.LEFT)
-
-        self.borrow_member_id_label = tk.Label(self.borrow_frame, text="Member ID:")
+        self.borrow_member_id_label = tk.Label(self.borrow_frame, text="Member ID:", font=("Arial", 16, "bold"), anchor="w")
         self.borrow_member_id_label.pack(side=tk.LEFT)
-
         self.borrow_member_id_entry = tk.Entry(self.borrow_frame, width=10)
         self.borrow_member_id_entry.pack(side=tk.LEFT)
-
-        self.borrow_button = tk.Button(self.borrow_frame, text="Borrow", command=self.borrow_book)
+        self.borrow_button = tk.Button(self.borrow_frame, text="Borrow", font=("Arial", 16, "bold"), command=self.borrow_book)
         self.borrow_button.pack(side=tk.LEFT)
 
-        self.return_frame = tk.Frame(self.window)
-        self.return_frame.pack(pady=10)
-
-        self.return_book_id_label = tk.Label(self.return_frame, text="Book ID:")
+        self.return_frame = tk.Frame(self.borrow_books_window)
+        self.return_frame.pack(pady=10, fill=tk.X)
+        self.return_book_id_label = tk.Label(self.return_frame, text="Book ID:", font=("Arial", 16, "bold"), anchor="w")
         self.return_book_id_label.pack(side=tk.LEFT)
-
-        self.return_book_id_entry = tk.Entry(self.return_frame, width=10)
+        self.return_book_id_entry = tk.Entry(self.return_frame, width=30)
         self.return_book_id_entry.pack(side=tk.LEFT)
-
-        self.return_member_id_label = tk.Label(self.return_frame, text="Member ID:")
+        self.return_member_id_label = tk.Label(self.return_frame, text="Member ID:", font=("Arial", 16, "bold"), anchor="w")
         self.return_member_id_label.pack(side=tk.LEFT)
-
         self.return_member_id_entry = tk.Entry(self.return_frame, width=10)
         self.return_member_id_entry.pack(side=tk.LEFT)
-
-        self.return_button = tk.Button(self.return_frame, text="Return", command=self.return_book)
+        self.return_button = tk.Button(self.return_frame, text="Return", font=("Arial", 16, "bold"), command=self.return_book)
         self.return_button.pack(side=tk.LEFT)
 
     def search_book(self):
@@ -140,6 +119,3 @@ class BorrowBooksGUI:
         for book in results:
             formatted_results += f"ID: {book[0]}\nISBN: {book[8]}\nTitle: {book[1]}\nGenre: {book[2]}\nAuthor: {book[3]}\nPublished Date: {book[6]}\nAvailable: {'Yes' if book[9] else 'No'}\n\n"
         return formatted_results
-
-    # def run(self):
-    #     self.window.mainloop()
