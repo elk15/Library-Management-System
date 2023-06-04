@@ -128,7 +128,7 @@ class Borrow_Books:
     # and return 0 if is not available or return 1, update the amount of book and insert a new registration into the
     # 'borrowed_books' table
     def borrow_books(self, bookid, memberid):
-        today = str(date.today())
+        today = date.today().strftime('%d/%m/%Y')
         try:
             with sqlite3.connect('library.db') as conn:
                 c = conn.cursor()
