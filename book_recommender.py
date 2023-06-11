@@ -83,6 +83,8 @@ class BookRecommender:
         A tuple that contains the member borrowing history and a DataFrame with the top recommended books
         for the given member.
         """
+        if (not isinstance(top_k, int)) or (top_k <= 0):
+            raise ValueError("top_k must be a positive integer")
 
         # Loads member borrow history
         borrowed_books_ids = self.get_borrowed_books_ids_for_member(member_id)
