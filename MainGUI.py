@@ -28,10 +28,6 @@ class LibraryGUI:
                                        command=self.open_borrow_book_view)
         self.borrow_button.pack(pady=10)
 
-        self.statistics_button = tk.Button(MainMenu, text="Statistics", font=("Arial", 16, "bold"), width=button_width,
-                                           command=self.open_statistics_view)
-        self.statistics_button.pack(pady=10)
-
         self.exit_button = tk.Button(MainMenu, text="Close", font=("Arial", 16, "bold"), width=button_width,
                                      command=MainMenu.destroy)
         self.exit_button.pack(pady=10)
@@ -75,9 +71,6 @@ class LibraryGUI:
         borrow_books_window.protocol("WM_DELETE_WINDOW", on_borrow_books_view_close)
         borrow_books_gui.borrow_books_window.mainloop()
 
-    def open_statistics_view(self):
-        # ανοίγει το GUI Statistics που έφτιαξε άλλος συνάδελφος
-        pass
 
     def on_books_window_close(self, books_window): # close button
         self.MainMenu_window.deiconify()
