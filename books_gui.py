@@ -1,9 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-from main import Library
-
-
-
+import Library
 
 class BooksGUI:
 

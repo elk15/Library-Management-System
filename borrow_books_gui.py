@@ -3,8 +3,6 @@ from tkinter import messagebox
 
 from borrowed_book import Borrow_Books
 
-
-
 class BorrowBooksGUI:
     def __init__(self, root):
 
