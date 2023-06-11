@@ -33,7 +33,7 @@ class LibraryGUI:
         self.statistics_button.pack(pady=10)
 
         self.exit_button = tk.Button(MainMenu, text="Close", font=("Arial", 16, "bold"), width=button_width,
-                                     command=MainMenu.quit)
+                                     command=MainMenu.destroy)
         self.exit_button.pack(pady=10)
 
     def open_members_view(self): # members window, κάνει minimize το MainMenu οταν πατηθεί και κάνει restore to MainMenu οταν κλείσει
@@ -76,6 +76,7 @@ class LibraryGUI:
         borrow_books_gui.borrow_books_window.mainloop()
 
     def open_statistics_view(self):
+        # ανοίγει το GUI Statistics που έφτιαξε άλλος συνάδελφος
         pass
 
     def on_books_window_close(self, books_window): # close button

@@ -4,6 +4,7 @@ from tkinter import messagebox, Text, simpledialog
 from members.manage_members import MemberManager
 from members.validate_member_details import *
 from members.member_storage import MemberStorage
+import sqlite3
 
 
 class MemberManagerGUI:
@@ -31,6 +32,9 @@ class MemberManagerGUI:
         self.pause_membership_button = tk.Button(members, text="Pause/Renew membership", font=("Arial", 16, "bold"),
                                                  width=button_width, command=self.pause_renew_membership)
         self.pause_membership_button.pack(pady=10)
+
+        self.show_member_id_button = tk.Button(members, text="Show Member ID", font=("Arial", 16, "bold"), width=button_width, command=self.show_member_id)
+        self.show_member_id_button.pack(pady=10)
 
         self.member_storage = MemberStorage()
 
@@ -206,3 +210,31 @@ class MemberManagerGUI:
             self.member_details_text.insert("1.0", f"Name: {member.get_name()}\n")
             self.member_details_text.insert("end", f"Status: {member.get_status()}\n")
             messagebox.showinfo("Success", "Member status has been updated.")
+
+    def show_member_id(self):
+        #Αναζήτηση στην βάση με το ονομα του user ωστε να εμφανίσει το ID του
+        self.member_name = simpledialog.askstring("Name", "Please enter the Name:")
+        self.name_to_search()
+
+    def name_to_search(self):
+        search_by_name = self.member_name
+
+        conn = sqlite3.connect('./library.db')
+        cursor = conn.cursor()
+        query = "SELECT name, member_id FROM members WHERE name = ?"
+        cursor.execute(query, (search_by_name,))
+        results = cursor.fetchall()
+
+        if not results:
+            messagebox.showinfo("No Results", f"No member with the name '{search_by_name}' was found.")
+        else:
+            result_text = ""
+            for row in results:
+                result_text += "Name: " + row[0] + "\n"
+                result_text += "Member ID: " + str(row[1]) + "\n"
+                result_text += "--------------------\n"
+
+            self.member_details_text.delete("1.0", "end")
+            self.member_details_text.insert("1.0", result_text)
+
+        conn.close()
