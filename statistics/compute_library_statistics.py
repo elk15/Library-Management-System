@@ -57,8 +57,8 @@ class LibraryStatistics:
     def count_num_books_in_timeframe(self, member_id: int, start_date: datetime, end_date: datetime) -> Optional[int]:
         borrowed_books = self.borrowed_books.where(
             (self.borrowed_books['memberid'] == member_id) &
-            (self.borrowed_books['date_borrowed'].dt.date >= start_date) &
-            (self.borrowed_books['date_borrowed'].dt.date <= end_date)
+            (self.borrowed_books['date_borrowed'] >= start_date) &
+            (self.borrowed_books['date_borrowed'] <= end_date)
         )
         # number of books borrowed by the member with this id in the specified timeframe
         return borrowed_books['bookid'].count()
@@ -75,8 +75,8 @@ class LibraryStatistics:
 
     def find_genre_preferences_in_timeframe(self, start_date: datetime, end_date: datetime) -> Optional[str]:
         borrowed_books_in_timeframe = self.borrowed_books.where(
-            (self.borrowed_books['date_borrowed'].dt.date >= start_date) &
-            (self.borrowed_books['date_borrowed'].dt.date <= end_date)
+            (self.borrowed_books['date_borrowed'] >= start_date) &
+            (self.borrowed_books['date_borrowed'] <= end_date)
         )
         borrowed_books_ids = tuple(borrowed_books_in_timeframe['bookid'].dropna().unique())
 
