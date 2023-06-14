@@ -8,7 +8,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 #File Imports
 from stat_graphs_gui import *
-from MainGUI import LibraryGUI
+from ..MainGUI import LibraryGUI
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"GUI\assets\frame0")
