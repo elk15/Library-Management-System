@@ -1,15 +1,10 @@
 import tkinter as tk
-<<<<<<< HEAD:books_gui.py
-from tkinter import messagebox
-import Library
-=======
 from tkinter import messagebox, ttk
 import datetime
 import re
 
 from main import Library
 
->>>>>>> 09b60c9e6b3509bb02c4c81eba79018a3bdf2754:GUI/books_gui.py
 
 class BooksGUI:
 
