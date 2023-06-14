@@ -1,8 +1,8 @@
 import tkinter as tk
 
-from GUI.member_manager_gui import MemberManagerGUI
-from GUI.books_gui import BooksGUI
-from GUI.borrow_books_gui import BorrowBooksGUI
+from member_manager_gui import MemberManagerGUI
+from books_gui import BooksGUI
+from borrow_books_gui import BorrowBooksGUI
 
 
 class LibraryGUI:
