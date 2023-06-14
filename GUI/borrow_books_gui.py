@@ -3,10 +3,7 @@ from tkinter import messagebox
 
 from borrowed_book import Borrow_Books
 
-<<<<<<< HEAD:borrow_books_gui.py
-=======
 
->>>>>>> 09b60c9e6b3509bb02c4c81eba79018a3bdf2754:GUI/borrow_books_gui.py
 class BorrowBooksGUI:
     def __init__(self, borrow_books):
 

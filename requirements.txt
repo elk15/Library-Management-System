@@ -1,6 +1,4 @@
 pandas==2.0.1
 faker==18.7.0
-matplotlib==3.7.0
-pathlib==1.0.1
 sentence-transformers==1.24.3
 scikit-learn==1.2.2

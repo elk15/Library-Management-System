@@ -8,6 +8,7 @@ from members.member_storage import MemberStorage
 
 DEFAULT_DB_PATH = './library.db'
 
+
 def convert_str_to_datetime_obj(date: str) -> datetime:
     return datetime.strptime(date, "%d/%m/%Y")
 
@@ -36,7 +37,7 @@ class BookStorage:
                 return pd.read_sql_query(f"SELECT * FROM books WHERE bookid in {book_ids}", conn)
         except sqlite3.Error as e:
             print(f"Error: {e}")
-            
+
     def load_all_books(self):
         try:
             with sqlite3.connect(self._db_filename) as conn:
@@ -44,21 +45,21 @@ class BookStorage:
         except sqlite3.Error as e:
             print(f"Error: {e}")
 
+
 class LibraryStatistics:
 
     def __init__(self, db_filename: str):
         borrowed_books_storage = BorrowedBooksStorage(db_filename)
         self.book_storage = BookStorage(db_filename)
-        self.conn = sqlite3.connect(db_filename) #may be optional 
-        self.member_storage = MemberStorage(db_filename).load_members()
+
         self.borrowed_books = borrowed_books_storage.load_borrowed_books()
         self.borrowed_books['date_borrowed'] = self.borrowed_books['date_borrowed'].apply(convert_str_to_datetime_obj)
 
     def count_num_books_in_timeframe(self, member_id: int, start_date: datetime, end_date: datetime) -> Optional[int]:
         borrowed_books = self.borrowed_books.where(
             (self.borrowed_books['memberid'] == member_id) &
-            (self.borrowed_books['date_borrowed'].dt.date >= start_date) &
-            (self.borrowed_books['date_borrowed'].dt.date <= end_date)
+            (self.borrowed_books['date_borrowed'] >= start_date) &
+            (self.borrowed_books['date_borrowed'] <= end_date)
         )
         # number of books borrowed by the member with this id in the specified timeframe
         return borrowed_books['bookid'].count()
@@ -75,8 +76,8 @@ class LibraryStatistics:
 
     def find_genre_preferences_in_timeframe(self, start_date: datetime, end_date: datetime) -> Optional[str]:
         borrowed_books_in_timeframe = self.borrowed_books.where(
-            (self.borrowed_books['date_borrowed'].dt.date >= start_date) &
-            (self.borrowed_books['date_borrowed'].dt.date <= end_date)
+            (self.borrowed_books['date_borrowed'] >= start_date) &
+            (self.borrowed_books['date_borrowed'] <= end_date)
         )
         borrowed_books_ids = tuple(borrowed_books_in_timeframe['bookid'].dropna().unique())
 
@@ -89,52 +90,7 @@ class LibraryStatistics:
         # gives the distribution of genre in borrowed books
         genre_distribution = borrowed_books['genre'].value_counts().to_string(header=False)
         return genre_distribution
-    
-    def single_member_genre_preferences_in_timeframe(self, member_id: int) -> Optional[str]:
-        """Author: EvanSar"""
-        
-        borrowed_books_ids = self.borrowed_books.loc[self.borrowed_books['memberid'] == member_id, 'bookid']
-        borrowed_books_ids = tuple(set(borrowed_books_ids.dropna()))
 
-        if not borrowed_books_ids:
-            print(f"No borrowed books available for member with id {member_id}")
-            return None
-
-        borrowed_books = self.book_storage.load_books_by_ids(borrowed_books_ids)
-        # gives the distribution of genre in borrowed books
-        genre_distribution = borrowed_books['genre'].value_counts().to_string(header=False)
-        return genre_distribution
-    
-    def stat_by_author(self, author_name: str) -> int:
-        """"Author: EvanSar"""
-    
-        try:
-            query = f'''
-            SELECT COUNT(*) AS num_borrowed_books
-            FROM borrowed_books
-            JOIN books ON books.bookid = borrowed_books.bookid
-            WHERE books.author = "{author_name}"
-            '''
-            result = self.conn.execute(query).fetchone()
-            return result[0]
-        
-        except sqlite3.Error as e:
-                print(f"Error: {e}")
-
-    # def stat_by_age(self, min_age: str, max_age: str) -> int:
-    #     """Author: EvanSar"""       
-    #     try:
-    #         query = f'''
-    #     SELECT COUNT(*) AS num_borrowed_books
-    #     FROM borrowed_books
-    #     JOIN members ON members.member_id = borrowed_books.memberid
-    #     WHERE members.age >= {min_age} AND members.age <= {max_age}
-    #                     '''
-    #         result = self.conn.execute(query).fetchone()
-    #         return result[0]
-       
-    #     except sqlite3.Error as e:
-    #         print(f"Error: {e}")
 
 class LibraryStatisticsInput:
 
@@ -261,12 +217,12 @@ if __name__ == "__main__":
         print("Library Statistics")
         print("========")
         print("1. Number of borrowed books in a given timeframe per member, ", end="")
-        print("2. Book preferences per member, ", end="") #Missing
+        print("2. Book preferences per member, ", end="")
         print("3. Genre preferences of all members in given a timeframe, ", end="")
         print("4. Member borrowing history, ", end="")
-        print("5. Number of books borrowed per author ", end="") #For Evan
-        print("6. Number of books borrowed per age ", end="") #For Evan
-        print("7. Number of books borrowed per gender ") #For Evan
+        print("5. Number of book loans per author ", end="")
+        print("6. Number of book loans per age ", end="")
+        print("7. Number of book loans per gender ")
 
         choice = input("Enter your choice (or press enter to exit): ")
 
