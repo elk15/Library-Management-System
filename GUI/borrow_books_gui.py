@@ -67,10 +67,26 @@ class BorrowBooksGUI:
             if results == 0:
                 messagebox.showinfo("Search Book", f"No results found for '{search_item}'.")
             else:
-                messagebox.showinfo("Search Book", "Search results:\n\n" + self.format_search_results(results))
+                self.display_results_window(results)
         else:
             messagebox.showerror("Error", "Please enter a search term.")
 
+    def display_results_window(self, results):
+        # Νεο παράθυρο με  τααποτελέσματε της αναζήτησης
+        results_window = tk.Toplevel()
+        results_window.title("Search Results")
+
+        # Αποτελέσματα αναζήτησης σε text
+        results_textbox = tk.Text(results_window, font=("Arial", 12))
+        results_textbox.pack()
+
+
+        for book in results:
+            formatted_result = f"ID: {book[0]}\nISBN: {book[8]}\nTitle: {book[1]}\nGenre: {book[2]}\nAuthor: {book[3]}\nPublished Date: {book[6]}\nAvailable: {'Yes' if book[9] else 'No'}\n\n"
+            results_textbox.insert(tk.END, formatted_result)
+
+        # αμυντικός μηχανισμός για αν μην μπορεί ο user να πειράξει τα results στο text
+        results_textbox.config(state=tk.DISABLED)
     def check_availability(self):
         book_id = self.availability_entry.get()
         if book_id:

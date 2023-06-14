@@ -36,6 +36,13 @@ class BookStorage:
                 return pd.read_sql_query(f"SELECT * FROM books WHERE bookid in {book_ids}", conn)
         except sqlite3.Error as e:
             print(f"Error: {e}")
+            
+    def load_all_books(self):
+        try:
+            with sqlite3.connect(self._db_filename) as conn:
+                return pd.read_sql_query(f"SELECT * FROM books", conn)
+        except sqlite3.Error as e:
+            print(f"Error: {e}")
 
 class LibraryStatistics:
 
