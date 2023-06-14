@@ -80,6 +80,7 @@ class MemberStorage:
 
         The method retrieves and returns the profile of a member with the specified ID from the library database.
         """
+
         try:
             with sqlite3.connect(self.path_to_db) as conn:
                 cursor = conn.cursor()
@@ -107,7 +108,6 @@ class MemberStorage:
             print("Error: ", err)
             return list()
 
-
     @staticmethod
     def member_already_exists_in_db(cursor: Cursor, member_name: str, member_email: str):
         """
@@ -133,4 +133,6 @@ class MemberStorage:
             raise ValueError(f"{num_found_members} entries with the same id were found in the database.")
         else:
             return LibraryMember(*results[0])
+
+
 
