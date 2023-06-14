@@ -76,19 +76,19 @@ class LibraryStatisticsGUI:
         self.distribution_by_age_button.grid(row=9, column=1, padx=8, pady=10)        
         
         self.distribution_by_author_button = tk.Button(width=28, fg="#FFFFFF",bg="#0461ED",master=self.parent, text="Distribution by Author", command=self.distribution_borrowed_books_by_author)
-        self.distribution_by_author_button.grid(row=10, column=0, padx=8, pady=10)           
-
+        self.distribution_by_author_button.grid(row=10, column=0, padx=8, pady=10)
 
     def count_num_borrowed_books(self):
         member_id = self.member_id_entry.get()
         start_date_str = self.start_date_entry.get()
         end_date_str = self.end_date_entry.get()
+
         if start_date_str.strip() == "" or end_date_str.strip() == "" or member_id.strip() == "":
             messagebox.showerror(title="Books borrowed by member", message="One or more of 'Date' and 'Member' Fields are empty") 
 
         if member_id.isdigit() and len(start_date_str) == 7 and len(end_date_str) == 7:
-            start_date = datetime.strptime(start_date_str, "%m/%Y").date()
-            end_date = datetime.strptime(end_date_str, "%m/%Y").date()
+            start_date = datetime.strptime(start_date_str, "%m/%Y")
+            end_date = datetime.strptime(end_date_str, "%m/%Y")
             library_stats = LibraryStatistics(self.db_filename)
             num_books = library_stats.count_num_books_in_timeframe(int(member_id), start_date, end_date)
             if num_books is not None:
@@ -105,8 +105,8 @@ class LibraryStatisticsGUI:
 
         else:
             if len(start_date_str) == 7 and len(end_date_str) == 7:
-                start_date = datetime.strptime(start_date_str, "%m/%Y").date()
-                end_date = datetime.strptime(end_date_str, "%m/%Y").date()
+                start_date = datetime.strptime(start_date_str, "%m/%Y")
+                end_date = datetime.strptime(end_date_str, "%m/%Y")
                 library_stats = LibraryStatistics(self.db_filename)
                 genre_distribution = library_stats.find_genre_preferences_in_timeframe(start_date, end_date)
                 if genre_distribution is not None:

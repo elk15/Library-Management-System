@@ -1,4 +1,4 @@
-from typing import Optional, Union, Callable
+from typing import Optional
 
 from members.member_storage import MemberStorage
 from members.member import LibraryMember
@@ -8,7 +8,7 @@ class MemberManager:
     """
     Class for managing members in the library.
 
-    This class provides functionality for managing members, including adding new members to the library.
+    This class provides functionality for including adding new members to the library.
 
     """
     def __init__(self):
