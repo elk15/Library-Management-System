@@ -157,7 +157,7 @@ class LibraryStatisticsGUI:
         plot = fig.add_subplot(111)
 
         try:
-            with sqlite3.connect(db_filename) as conn:
+            with sqlite3.connect(self.db_filename) as conn:
                 query = '''
                         SELECT members.age, COUNT(*) as num_borrowed_books
                         FROM borrowed_books
@@ -189,7 +189,7 @@ class LibraryStatisticsGUI:
         plot = fig.add_subplot(111)
 
         try:
-            with sqlite3.connect(db_filename) as conn:
+            with sqlite3.connect(self.db_filename) as conn:
                 query = '''
                         SELECT books.author, COUNT(*) as num_borrowed_books
                         FROM borrowed_books

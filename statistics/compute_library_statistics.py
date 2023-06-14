@@ -64,6 +64,8 @@ class LibraryStatistics:
         return borrowed_books['bookid'].count()
 
     def find_borrowed_books_for_member(self, member_id: int):
+        """ Author: EvanSar
+          Called only from stats_gui.py"""
         borrowed_books_ids = self.borrowed_books.loc[self.borrowed_books['memberid'] == member_id, 'bookid']
         borrowed_books_ids = tuple(set(borrowed_books_ids.dropna()))
 
@@ -91,7 +93,8 @@ class LibraryStatistics:
         return genre_distribution
     
     def single_member_genre_preferences_in_timeframe(self, member_id: int) -> Optional[str]:
-        """Author: EvanSar"""
+        """Author: EvanSar
+        Called only from stats_gui.py"""
         
         borrowed_books_ids = self.borrowed_books.loc[self.borrowed_books['memberid'] == member_id, 'bookid']
         borrowed_books_ids = tuple(set(borrowed_books_ids.dropna()))
@@ -106,7 +109,8 @@ class LibraryStatistics:
         return genre_distribution
     
     def stat_by_author(self, author_name: str) -> int:
-        """"Author: EvanSar"""
+        """Author: EvanSar
+        Called only from stats_gui.py"""
     
         try:
             query = f'''

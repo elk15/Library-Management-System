@@ -8,7 +8,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 #File Imports
 from stat_graphs_gui import *
-from ..MainGUI import LibraryGUI
+from MainGUI import LibraryGUI
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"GUI\assets\frame0")
@@ -215,14 +215,14 @@ class StatisticsMenuGUI:
         )
         self.button_2.place(
             x=571.0,
-            y=759.0,
+            y=715,
             width=238.0,
             height=42.0
         )
 
         self.canvas.create_text(
             580.0,
-            719.0,
+            685.0,
             anchor="nw",
             text="Launch Application",
             fill="#000000",
